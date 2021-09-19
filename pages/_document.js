@@ -12,7 +12,9 @@ class MyDocument extends Document {
 				<body>
 					<Main />
 					<NextScript />
-					<div id='notifications'></div> {/* // for add Portal */}
+					{/* // for add Portal */}
+					<div id='backdrop--root'></div>
+					<div id='modal--overlay--root'></div>
 				</body>
 			</Html>
 		);
