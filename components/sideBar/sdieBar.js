@@ -27,6 +27,7 @@ import { setLogOutState, selectUser } from "../../features/user/userSlice";
 import { useRouter } from "next/router";
 
 import { useAuthState } from "react-firebase-hooks/auth";
+
 import { auth } from "../../config/firebase";
 import Option from "./SideBarOption";
 
@@ -36,92 +37,104 @@ const SideBar = (props) => {
 	const dispatch = useDispatch();
 	const router = useRouter();
 
+	console.log(" user?.displayName", user?.photoURL);
+
 	return (
 		<SideBarWrapper>
-			<SideBarHeader>
-				<div className='user'>
-					<IconButton className='avatar icons'>
-						<Avatar
-							src={
-								user?.photoURL
-									? user?.photoURL
-									: "https://lh3.googleusercontent.com/a/AATXAJxvNL0mo2ldUytJDKQLwdUu6Qagh5SbgZnChr5S=s96-c"
-							}
-						/>
-					</IconButton>
-					<span> User Name</span>
-					<FiberManualRecordIcon className='absolute-icon' />
-				</div>
-			</SideBarHeader>
-			<SideBarBody>
-				<Option
-					Icon={PeopleAltIcon}
-					title='Friends'
-					color='#4AD2C0'
-					option='request'
-				/>
-				<Option Icon={GroupWorkIcon} title='Group' color='#197EF3' />
-				<Option
-					Icon={StoreMallDirectoryIcon}
-					title='MarketPlace'
-					color='#4AD2C0'
-					option='new'
-				/>
-				<Option
-					Icon={VideoLibraryIcon}
-					title='Watch'
-					color='#197EF3'
-					option='new videos'
-				/>
+			<div id='fixed-position'>
+				<SideBarHeader>
+					<div className='user'>
+						<IconButton className='avatar icons'>
+							<Avatar
+								src={
+									user?.photoURL
+										? user?.photoURL
+										: "/images/tem-img.png"
+								}
+							/>
+						</IconButton>
+						<span>{user?.displayName ? user?.displayName : ""}</span>
+						<FiberManualRecordIcon className='absolute-icon' />
+					</div>
+				</SideBarHeader>
+				<SideBarBody>
+					<Option
+						Icon={PeopleAltIcon}
+						title='Friends'
+						color='#4AD2C0'
+						option='request'
+					/>
+					<Option Icon={GroupWorkIcon} title='Group' color='#197EF3' />
+					<Option
+						Icon={StoreMallDirectoryIcon}
+						title='MarketPlace'
+						color='#4AD2C0'
+						option='new'
+					/>
+					<Option
+						Icon={VideoLibraryIcon}
+						title='Watch'
+						color='#197EF3'
+						option='new videos'
+					/>
 
-				<Option Icon={RestoreIcon} title='Memories' color='#4AD2C0' />
-				<Option Icon={TurnedInIcon} title='Saved' color='#BB32B3' />
-				<Option Icon={EmojiFlagsIcon} title='Pages' color='#DE7F22' />
-				<Option
-					Icon={FavoriteIcon}
-					title='Covid19 Information'
-					color='#BE33B2'
-				/>
-				<Option
-					Icon={EventIcon}
-					title='Events'
-					color='#F34F6C'
-					option='notifications'
-				/>
-				<Option Icon={WorkIcon} title='Jobs' color='#DE7F22' />
+					<Option Icon={RestoreIcon} title='Memories' color='#4AD2C0' />
+					<Option Icon={TurnedInIcon} title='Saved' color='#BB32B3' />
+					<Option Icon={EmojiFlagsIcon} title='Pages' color='#DE7F22' />
+					<Option
+						Icon={FavoriteIcon}
+						title='Covid19 Information'
+						color='#BE33B2'
+					/>
+					<Option
+						Icon={EventIcon}
+						title='Events'
+						color='#F34F6C'
+						option='notifications'
+					/>
+					<Option Icon={WorkIcon} title='Jobs' color='#DE7F22' />
 
-				<Option Icon={TableChartIcon} title='Ads Manger' color='#197EF3' />
+					<Option
+						Icon={TableChartIcon}
+						title='Ads Manger'
+						color='#197EF3'
+					/>
 
-				<Option Icon={SendIcon} title='Campus' color='#197EF3' />
+					<Option Icon={SendIcon} title='Campus' color='#197EF3' />
 
-				<Option Icon={StarsIcon} title='Favorites' color='#FAD857' />
+					<Option Icon={StarsIcon} title='Favorites' color='#FAD857' />
 
-				<Option
-					Icon={SupervisorAccountIcon}
-					title='Friends List'
-					color='#197EF3'
-				/>
-				<Option
-					Icon={GamesIcon}
-					title='Video Games'
-					color='#DE7F22'
-					option='new'
-				/>
+					<Option
+						Icon={SupervisorAccountIcon}
+						title='Friends List'
+						color='#197EF3'
+					/>
+					<Option
+						Icon={GamesIcon}
+						title='Video Games'
+						color='#DE7F22'
+						option='new'
+					/>
 
-				<Option Icon={LiveTvIcon} title='Live Videos' color='#E42243' />
-				<Option Icon={SettingsIcon} title='Messenger Kid' color='#A0D977' />
-				<Option
-					Icon={WbSunnyIcon}
-					title='Weather'
-					color='#F8CC47'
-					option='notifications'
-				/>
-				<Option
-					Icon={ViewAgendaIcon}
-					title='Most Recently'
-					color='#197EF3'
-				/>
-			</SideBarBody>
+					<Option Icon={LiveTvIcon} title='Live Videos' color='#E42243' />
+					<Option
+						Icon={SettingsIcon}
+						title='Messenger Kid'
+						color='#A0D977'
+					/>
+					<Option
+						Icon={WbSunnyIcon}
+						title='Weather'
+						color='#F8CC47'
+						option='notifications'
+					/>
+					<Option
+						Icon={ViewAgendaIcon}
+						title='Most Recently'
+						color='#197EF3'
+					/>
+				</SideBarBody>
+			</div>
 		</SideBarWrapper>
 	);
 };
@@ -136,6 +149,12 @@ const SideBarWrapper = styled.div`
 
 	@media (max-width: 42.375rem) {
 		display: none;
+	}
+
+	#fixed-position {
+		position: fixed;
+		max-width: 23rem;
+		min-width: 19rem;
 	}
 `;
 
@@ -174,10 +193,10 @@ const SideBarHeader = styled.div`
 `;
 
 const SideBarBody = styled.div`
-	/* overflow: hidden !important;
-
 	max-height: 75vh;
+	overflow: hidden !important;
+
 	&:hover {
 		overflow-y: auto !important;
-	} */
+	}
 `;

@@ -17,16 +17,15 @@ const firebaseConfig = {
 
 	apiKey: "AIzaSyDpeFudyoxaXwA2Z18VvIrxXb6D7FBSbMs",
 
-  authDomain: "chart-dashboard-team-task1.firebaseapp.com",
+	authDomain: "chart-dashboard-team-task1.firebaseapp.com",
 
-  projectId: "chart-dashboard-team-task1",
+	projectId: "chart-dashboard-team-task1",
 
-  storageBucket: "chart-dashboard-team-task1.appspot.com",
+	storageBucket: "chart-dashboard-team-task1.appspot.com",
 
-  messagingSenderId: "246768945817",
+	messagingSenderId: "246768945817",
 
-  appId: "1:246768945817:web:3a87895d9d0bd59e520608"
-
+	appId: "1:246768945817:web:3a87895d9d0bd59e520608",
 };
 
 const firebaseApp = !firebase.apps.length

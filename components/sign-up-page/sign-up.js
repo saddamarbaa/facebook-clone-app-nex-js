@@ -2,8 +2,74 @@
 
 import styled from "styled-components";
 import Image from "next/image";
+import { auth, provider } from "../../config/firebase";
+import React, { useState, useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { useRouter } from "next/router";
+
+import LogInScreen from "../../pages/login";
 
 const SignUpComponent = (props) => {
+	const [logIn, setLogIn] = useState(false);
+	const router = useRouter();
+	const [email, setEmail] = useState();
+	const [password, setPassword] = useState();
+	const [firstName, setFirstName] = useState();
+	const [lastName, setLastName] = useState();
+	const [signIn, setSignIn] = useState(false);
+
+	const {
+		register,
+		handleSubmit,
+		formState: { errors },
+	} = useForm();
+
+	useEffect(() => {
+		if (logIn) {
+			return <LogInScreen />;
+		}
+	}, [setLogIn]);
+
+	if (logIn) {
+		return <LogInScreen />;
+	}
+
+	const onSubmit = (data) => {
+		if (!errors.email) {
+			auth
+				.createUserWithEmailAndPassword(data.email, password)
+				.then((registeredUser) => {
+					registeredUser.user.updateProfile({
+						displayName: data.firstName,
+						photoURL: "/images/tem-img.png",
+					});
+
+					router.push("/");
+				})
+				.catch((error) => {
+					// An error happened.
+					// const errorCode = error.code;
+					const errorMessage = error.message;
+					alert(errorMessage);
+				});
+		}
+	};
+
+	const signInWithGoogleHandler = (event) => {
+		event.preventDefault();
+		auth
+			.signInWithPopup(provider)
+			.then((signInedUser) => {
+				// signIn successful.
+				// console.log(signInedUser);
+				history.push("/");
+			})
+			.catch((error) => {
+				// An error happened.
+				// console.log(error);
+			});
+	};
+
 	return (
 		<LogInPageComponentWrapper>
 			<Container>
@@ -26,40 +92,69 @@ const SignUpComponent = (props) => {
 							<p>It&aposs quick and easy.</p>
 						</div>
 
-						<form>
+						<form autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
 							<div className='flx-content'>
 								<div className='control'>
+									{errors.firstName && (
+										<p className='error'>First name is required</p>
+									)}
 									<input
-										type='text'
 										id='firstName'
-										required
 										placeholder='First name'
+										onChange={(event) => {
+											setFirstName(event.target.value);
+										}}
+										value={firstName}
+										{...register("firstName", { required: true })}
 									/>
 								</div>
 
 								<div className='control'>
+									{errors.lastName && (
+										<p className='error'>last name is required</p>
+									)}
 									<input
-										type='text'
-										id='lastName'
-										required
 										placeholder='Surname'
+										onChange={(event) => {
+											setLastName(event.target.value);
+										}}
+										value={lastName}
+										{...register("lastName", { required: true })}
 									/>
 								</div>
 							</div>
+
 							<div className='control'>
 								<input
-									type='email'
-									id='email'
-									required
+									onChange={(event) => {
+										setEmail(event.target.value);
+									}}
+									value={email}
+									className='input'
+									type='text'
+									id={errors ? "error" : "email"}
+									name='email'
 									placeholder='Email  Address'
+									required
+									{...register("email", {
+										required: true,
+										pattern:
+											/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+									})}
 								/>
 							</div>
+
 							<div className='control'>
 								<input
 									type='password'
 									id='password'
 									required
 									placeholder='New Password'
+									minLength='6'
+									onChange={(event) => {
+										setPassword(event.target.value);
+									}}
+									value={password}
 								/>
 							</div>
 							<div
@@ -280,14 +375,12 @@ const SignUpComponent = (props) => {
 									<input
 										type='text'
 										id='Female'
-										required
 										placeholder='Female'
 									/>
 
 									<input
 										type='radio'
 										id='Female'
-										required
 										placeholder='Female'
 										style={{
 											position: "absolute",
@@ -301,17 +394,11 @@ const SignUpComponent = (props) => {
 								<div
 									className='control'
 									style={{ position: "relative" }}>
-									<input
-										type='text'
-										id='Male'
-										required
-										placeholder='Male'
-									/>
+									<input type='text' id='Male' placeholder='Male' />
 
 									<input
 										type='radio'
 										id='Male'
-										required
 										placeholder='Male'
 										style={{
 											position: "absolute",
@@ -328,14 +415,12 @@ const SignUpComponent = (props) => {
 									<input
 										type='text'
 										id='Custom'
-										required
 										placeholder='Custom'
 									/>
 
 									<input
 										type='radio'
 										id='Custom'
-										required
 										placeholder='Custom'
 										style={{
 											position: "absolute",
@@ -360,22 +445,28 @@ const SignUpComponent = (props) => {
 							</div>
 						</form>
 						<div className='actions ' style={{ padding: "0 2rem" }}>
-							<CustomButtonWithGoogle>
+							<CustomButtonWithGoogle onClick={signInWithGoogleHandler}>
 								<Image
+									onClick={signInWithGoogleHandler}
 									src='/images/google.png'
 									alt='Google Logo'
 									width={25}
 									height={25}
 									objectFit='contain'
 								/>
-								<span style={{ marginLeft: "0.5rem" }}>
+								<span
+									style={{ marginLeft: "0.5rem" }}
+									onClick={signInWithGoogleHandler}>
 									Sign with Google
 								</span>
 							</CustomButtonWithGoogle>
 						</div>
 						<p className='option'>Or</p>
-						<div className='actions' style={{ padding: "0 2rem" }}>
-							<NewAccountButton>
+						<div
+							className='actions'
+							style={{ padding: "0 2rem" }}
+							onClick={() => setLogIn(true)}>
+							<NewAccountButton onClick={() => setLogIn(true)}>
 								Already have an account?
 							</NewAccountButton>
 						</div>
@@ -409,6 +500,11 @@ const LogInPageComponentWrapper = styled.div`
 	overflow: hidden;
 	margin: 0 auto;
 	padding-bottom: 3rem;
+
+	.error {
+		width: 100%;
+		color: red;
+	}
 `;
 
 const Container = styled.div`
@@ -586,9 +682,6 @@ const CustomButton = styled.button`
 	margin: 0 auto;
 
 	&:hover {
-		background: var(--color-primary-10);
-		border-color: var(--color-primary-10);
-		background: #0a66c2;
 		background: rgba(14, 118, 168, 0.8);
 	}
 `;
@@ -641,7 +734,7 @@ const UserDateOfBirthContainer = styled.div`
 		flex: 1;
 		position: relative;
 		overflow: hidden;
-		transition: 0.4s;
+		transition: 0.3s;
 		border-radius: 0.25em;
 		color: gray;
 		height: 2.4rem;

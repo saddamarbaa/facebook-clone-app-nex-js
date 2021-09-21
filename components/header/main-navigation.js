@@ -19,8 +19,9 @@ import { useRouter } from "next/router";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../../config/firebase";
 import { IconButton } from "@material-ui/core";
-import { getRandomNumber } from "../../lib/api-util";
+import { getRandomIntNumberBetween } from "../../lib/api-util";
 
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
 const MainNavigation = () => {
 	const [user, loading] = useAuthState(auth);
 	const router = useRouter();
@@ -71,7 +72,7 @@ const MainNavigation = () => {
 						<div className='icon-div'>
 							<VideoLibraryIcon className='MuiSvgIconCustom' />
 							<div className='absolute-counter'>
-								{getRandomNumber(7)}
+								{getRandomIntNumberBetween(1, 8)}
 							</div>
 						</div>
 					</div>
@@ -79,7 +80,7 @@ const MainNavigation = () => {
 						<div className='icon-div'>
 							<AccountBalanceIcon className='MuiSvgIconCustom' />
 							<div className='absolute-counter'>
-								{getRandomNumber(9)}
+								{getRandomIntNumberBetween(1, 9)}
 							</div>
 						</div>
 					</div>
@@ -91,7 +92,7 @@ const MainNavigation = () => {
 						<div className='icon-div'>
 							<PictureInPictureIcon className='MuiSvgIconCustom' />
 							<div className='absolute-counter'>
-								{getRandomNumber(5)}
+								{getRandomIntNumberBetween(1, 5)}
 							</div>
 						</div>
 					</div>
@@ -107,7 +108,7 @@ const MainNavigation = () => {
 									: "https://lh3.googleusercontent.com/a/AATXAJxvNL0mo2ldUytJDKQLwdUu6Qagh5SbgZnChr5S=s96-c"
 							}
 						/>
-						<span> User Name</span>
+						<span> {user?.displayName}</span>
 					</div>
 
 					<IconButton>
@@ -125,7 +126,7 @@ const MainNavigation = () => {
 						<div className='icon-rounded  MuiSvgIconCustom'>
 							<NotificationsActiveIcon className='icon' />
 							<div className='absolute-counter'>
-								{getRandomNumber(5)}
+								{getRandomIntNumberBetween(1, 8)}
 							</div>
 						</div>
 					</IconButton>
@@ -145,24 +146,27 @@ export default MainNavigation;
 
 const MainNavigationWrapper = styled.header`
 	width: 100vw;
+	min-width: 100vw;
 	position: sticky;
 	display: flex;
 	align-items: center;
 	top: 0;
-	z-index: 99999;
+	z-index: 110;
 	background-color: white;
 	border-radius: 6px;
 	box-shadow: 0 0px 2px rgba(0, 0, 0, 0.2);
 	padding-right: 2rem;
-
 	nav {
 		width: 100%;
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
 		background: white;
-		padding-top: 0.3rem;
+		max-width: 90.75rem;
 		overflow: hidden;
+		margin: 0 auto;
+		padding-top: 0.3rem;
+
 		@media (max-width: 768px) {
 			padding-top: 1rem;
 		}

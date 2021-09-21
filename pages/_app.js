@@ -38,13 +38,13 @@ Router.events.on("routeChangeError", progress.finish);
 function MyApp({ Component, pageProps }) {
 	const [user, loading] = useAuthState(auth);
 
-	// if (loading) {
-	// 	return <Loading />;
-	// }
+	if (loading) {
+		return <Loading />;
+	}
 
-	// if (!user) {
-	// 	return <LogInScreen />;
-	// }
+	if (!user) {
+		return <LogInScreen />;
+	}
 
 	return (
 		<React.Fragment>

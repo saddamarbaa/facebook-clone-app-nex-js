@@ -11,9 +11,9 @@ const HomePageComponent = (props) => {
 		<HomePageComponentWrapper>
 			<MainNavigation />
 			<AppBodyWrapper>
-				{/* <SideBar /> */}
+				<SideBar />
 				<Feeds />
-				{/* <Widget /> */}
+				<Widget />
 			</AppBodyWrapper>
 		</HomePageComponentWrapper>
 	);
@@ -24,12 +24,14 @@ export default HomePageComponent;
 const HomePageComponentWrapper = styled.div`
 	min-height: 100vh;
 	width: 100%;
-	max-width: 100%;
 `;
 
 const AppBodyWrapper = styled.div`
 	display: flex;
-	width: 100%;
-	min-height: 80vh;
-	overflow: hidden !important;
+	flex-direction: row;
+	min-height: 100%;
+	align-items: stretch;
+	max-width: 90.75rem;
+	overflow: hidden;
+	margin: 0 auto;
 `;

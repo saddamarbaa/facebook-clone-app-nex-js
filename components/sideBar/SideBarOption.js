@@ -1,7 +1,7 @@
 /** @format */
 import { IconButton } from "@material-ui/core";
 import FiberManualRecordIcon from "@material-ui/icons/FiberManualRecord";
-import { getRandomNumber } from "../../lib/api-util";
+import { getRandomIntNumberBetween } from "../../lib/api-util";
 
 import styled from "styled-components";
 
@@ -18,7 +18,7 @@ const Option = ({ Icon, title, color, option }) => {
 				{option && (
 					<div className='absolute-pos'>
 						<FiberManualRecordIcon className='absolute-icon' />{" "}
-						{getRandomNumber(10)}
+						{getRandomIntNumberBetween(1, 10)}
 						<span style={{ marginLeft: "3px" }}> {option}</span>
 					</div>
 				)}

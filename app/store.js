@@ -1,14 +1,12 @@
 /** @format */
 
 import { configureStore } from "@reduxjs/toolkit";
-import currentChattingUserReducer from "../features/currentChattingUser/currentChattingUserSlice";
-import sendMailReducer from "../features/sendMail/sendMailSlice";
+import sendPostReducer from "../features/sendPost/sendPostSlice";
 import userReducer from "../features/user/userSlice";
 
 export const store = configureStore({
 	reducer: {
-		sendEmail: sendMailReducer,
-		currentChattingUser: currentChattingUserReducer,
+		sendPost: sendPostReducer,
 		user: userReducer,
 	},
 });

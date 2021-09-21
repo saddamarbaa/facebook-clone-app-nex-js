@@ -9,17 +9,29 @@ import FlipMove from "react-flip-move";
 import { useRef } from "react";
 import { auth } from "../../config/firebase";
 import { Card } from "@material-ui/core";
-import { Avatar, IconButton } from "@material-ui/core";
+
+import StaticPosts from "./staticPosts";
+import Stories from "./stories";
+import ModalOverlay from "./modalOverlay";
+
+import { useDispatch, useSelector } from "react-redux";
+import { selectSendPost } from "../../features/sendPost/sendPostSlice";
 
 const Feeds = (props) => {
+	const dispatch = useDispatch();
+	const showCompose = useSelector(selectSendPost);
+
+	const [user] = useAuthState(auth);
 	const messageRef = useRef(null);
 	const autoScrollToBottomRef = useRef(null);
-	const [user] = useAuthState(auth);
 
 	return (
 		<FeedWrapper>
-			<AddPost />
+			{showCompose && <ModalOverlay />}
 
+			<Stories />
+			<AddPost />
+			<StaticPosts />
 			<FeedsChatBody>
 				<FlipMove></FlipMove>
 

@@ -5,6 +5,12 @@ import styled from "styled-components";
 import CloseIcon from "@mui/icons-material/Close";
 import { Avatar, IconButton } from "@material-ui/core";
 import { useDispatch, useSelector } from "react-redux";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "../../config/firebase";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import firebase from "firebase";
+
 import {
 	setHideComposeState,
 	setShowComposeState,
@@ -13,6 +19,14 @@ import BackDrop from "../ui/backdrop";
 
 const NewPost = ({ name, image }) => {
 	const dispatch = useDispatch();
+	const [user] = useAuthState(auth);
+	const [post, setPost] = useState();
+
+	const {
+		register,
+		handleSubmit,
+		formState: { errors },
+	} = useForm();
 
 	const closeCompose = () => {
 		dispatch(setHideComposeState());
@@ -21,6 +35,28 @@ const NewPost = ({ name, image }) => {
 	const showCompose = () => {
 		dispatch(setShowComposeState());
 	};
+
+	const onSubmit = (data) => {
+		if (!errors.post) {
+			db.collection("posts")
+				.add({
+					displayName: user?.displayName,
+					photoURL: user?.photoURL
+						? user?.photoURL
+						: "/images/tem-img.png",
+					post: data.post,
+					timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+				})
+				.then((docRef) => {
+					console.log("Document written with ID: ", docRef.id);
+				})
+				.catch((error) => {
+					console.error("Error adding document: ", error);
+				});
+		}
+	};
+
+	const placeholder = `What's on your mind, (${user?.displayName})?`;
 
 	// Portal
 	return (
@@ -49,24 +85,32 @@ const NewPost = ({ name, image }) => {
 							<UserHeading>
 								<IconButton style={{ marginLeft: "-1rem" }}>
 									<Avatar
-										src={image ? image : "/images/tem-img.png"}
+										src={
+											user?.photoURL
+												? user?.photoURL
+												: "/images/tem-img.png"
+										}
 									/>
 								</IconButton>
 								<div className='user-head'>
-									<span>Demo User</span>
+									<span>
+										{user?.displayName ? user?.displayName : ""}
+									</span>
 								</div>
 							</UserHeading>
 
 							<div className='control'>
-								<textarea
-									id='subject'
-									maxLength='55000'
-									minLength='10'
-									rows='4'
-									cols='50'
-									name='subject'
-									placeholder="What's on your mind, (user)?"
-									required></textarea>
+								{errors.subject && (
+									<p className='error'>Post is required</p>
+								)}
+								<input
+									onChange={(event) => {
+										setPost(event.target.value);
+									}}
+									value={post}
+									placeholder={placeholder}
+									{...register("post", { required: true })}
+								/>
 							</div>
 						</BodyContent>
 
@@ -104,9 +148,6 @@ const Container = styled.div`
 	border-radius: 6px;
 	background-color: white;
 	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
-	display: flex;
-	flex-direction: column;
-	padding-bottom: 0.5rem;
 `;
 
 const TopContent = styled.div`

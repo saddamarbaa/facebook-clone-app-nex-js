@@ -37,6 +37,8 @@ const AddPost = (props) => {
 		dispatch(setShowComposeState());
 	};
 
+	const placeholder = `What's on your mind, (${user?.displayName}) ?`;
+
 	return (
 		<AddPostWrapper>
 			<HeaderContainer>
@@ -44,16 +46,14 @@ const AddPost = (props) => {
 					<IconButton>
 						<Avatar
 							src={
-								user?.photoURL
-									? user?.photoURL
-									: "https://lh3.googleusercontent.com/a/AATXAJxvNL0mo2ldUytJDKQLwdUu6Qagh5SbgZnChr5S=s96-c"
+								user?.photoURL ? user?.photoURL : "/images/tem-img.png"
 							}
 						/>
 					</IconButton>
 					<HeaderSearch>
 						<input
 							type='text'
-							placeholder='What`s is on your mind,  (user Name) ?'
+							placeholder={placeholder}
 							onClick={showCompose}
 						/>
 					</HeaderSearch>

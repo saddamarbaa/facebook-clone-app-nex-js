@@ -11,6 +11,8 @@
 }
 
 body {
+	--transition-duration: 0.3s;
+	--line-height: 1.7;
 	background-color: #f0f2f5;
 	--background-color: #f0f2f5;
 	--color-black: rgb(0 0 0);

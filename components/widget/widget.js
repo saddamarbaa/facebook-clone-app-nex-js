@@ -1,107 +1,75 @@
 /** @format */
+import { Card } from "@material-ui/core";
 import styled from "styled-components";
+import { CardGiftcard } from "@material-ui/icons";
+import SearchIcon from "@material-ui/icons/Search";
+import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
+import ModeEditIcon from "@mui/icons-material/ModeEdit";
+
+import { friends } from "../../lib/api-util";
+
+import Friend from "./friend";
 
 const Widget = () => {
 	return (
 		<WidgetWrapper>
-			<WidgetVideo>
-				<h3>Recommended React & Next js videos</h3>
-			</WidgetVideo>
+			<div id='fixed-position'>
+				<BirthdayContent>
+					<Card>
+						<div className='birthday'>
+							<div className='first-div'>
+								<p>
+									<CardGiftcard
+										style={{ marginRight: "1rem", color: "#4AD2C0" }}
+									/>
+									<span>Birthdays</span>
+								</p>
+								<MoreHorizIcon />
+							</div>
+							<div className='second-div'>
+								<span style={{ marginRight: "8px" }}>
+									Mark Zuckerberg
+								</span>
+								Birthdays is today
+							</div>
+						</div>
+					</Card>
+				</BirthdayContent>
 
-			<WidgetVideo>
-				<h4>Next.js for Beginners - Full Course </h4>
-				<iframe
-					width='100%'
-					height='300'
-					src='https://www.youtube.com/embed/1WmNXEVia8I?autoplay=1&mute=1'
-					title='YouTube video player'
-					frameborder='0'
-					allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
-					allowfullscreen></iframe>
-			</WidgetVideo>
-			<WidgetVideo>
-				<h4>Next Js conferences 2021 by Vercel</h4>
-				<iframe
-					width='100%'
-					height='300'
-					src='https://www.youtube.com/embed/ze8ycxc1UzE'
-					title='YouTube video player'
-					frameborder='0'
-					allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
-					allowfullscreen></iframe>
-			</WidgetVideo>
+				<Friends>
+					<EditBottom>
+						<ModeEditIcon
+							style={{
+								fontSize: "2rem",
+								color: "black",
+							}}
+						/>
+					</EditBottom>
+					<HeadingContent>
+						<h4>Contact</h4>
+						<div>
+							<SearchIcon style={{ marginTop: "4px" }} />
+							<MoreHorizIcon
+								style={{
+									marginLeft: "2rem",
+								}}
+							/>
+						</div>
+					</HeadingContent>
 
-			<WidgetVideo>
-				<h4>Harvard University CS50, JavaScript</h4>
-				<iframe
-					width='100%'
-					height='315'
-					src='https://www.youtube.com/embed/5g0x2xv3aHU?autoplay=1&mute=1'
-					title='YouTube video player'
-					frameborder='0'
-					allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
-					allowfullscreen></iframe>
-			</WidgetVideo>
-
-			<WidgetVideo>
-				<h4>Full React Course Learn Fundamentals</h4>
-				<iframe
-					width='100%'
-					height='300'
-					src='https://www.youtube.com/embed/4UZrsTqkcW4'
-					title='YouTube video player'
-					frameborder='0'
-					allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
-					allowfullscreen></iframe>
-			</WidgetVideo>
-
-			<WidgetVideo>
-				<h4>JavaScript Programming - Full Course</h4>
-				<iframe
-					width='100%'
-					height='315'
-					src='https://www.youtube.com/embed/jS4aFq5-91M'
-					title='YouTube video player'
-					frameborder='0'
-					allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
-					allowfullscreen></iframe>
-			</WidgetVideo>
-
-			<WidgetVideo>
-				<h4>Learn TypeScript from Scratch!</h4>
-				<iframe
-					width='100%'
-					height='300'
-					src='https://www.youtube.com/embed/BwuLxPH8IDs?autoplay=1&mute=1'
-					title='YouTube video player'
-					frameborder='0'
-					allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
-					allowfullscreen></iframe>
-			</WidgetVideo>
-
-			<WidgetVideo>
-				<h4>CS50 2021 - Lecture 0 - Scratch</h4>
-				<iframe
-					width='100%'
-					height='315'
-					src='https://www.youtube.com/embed/XGEh61saXT4'
-					title='YouTube video player'
-					frameborder='0'
-					allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
-					allowfullscreen></iframe>
-			</WidgetVideo>
-
-			<WidgetVideo>
-				<h4>User Authentication (Node js, Express)</h4>
-				<iframe
-					width='100%'
-					height='300'
-					src='https://www.youtube.com/embed/F-sFp_AvHc8'
-					title='YouTube video player'
-					frameborder='0'
-					allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
-					allowfullscreen></iframe>
-			</WidgetVideo>
+					{friends?.map((friend, index) => {
+						return (
+							<Friend
+								key={index}
+								image={friend?.image}
+								name={friend?.name}
+								quote={friend?.quote}
+								isOffLine={index === 3 || index === 5}
+							/>
+						);
+					})}
+				</Friends>
+			</div>
 		</WidgetWrapper>
 	);
 };
@@ -110,23 +78,95 @@ export default Widget;
 
 const WidgetWrapper = styled.div`
 	flex: 0.3;
-	min-height: 50vh;
+	min-height: 100vh;
 	max-width: 30rem;
 	min-width: 25rem;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	padding-bottom: 3rem;
-
 	@media (max-width: 75rem) {
 		display: none;
 	}
+
+	#fixed-position {
+		position: fixed;
+		max-width: 30rem;
+		min-width: 25rem;
+	}
 `;
 
-const WidgetVideo = styled.div`
-	margin: 1rem;
-	h4 {
-		padding-bottom: 0.5rem;
-		color: var(--color-primary);
+const BirthdayContent = styled.div`
+	max-width: 20rem;
+	width: 20rem;
+	margin: 0 auto;
+	margin-top: 1rem;
+	margin-bottom: 2rem;
+
+	.birthday {
+		padding: 1rem;
+		min-height: 6.25rem;
+		padding: 1rem;
+		cursor: pointer;
 	}
+
+	.first-div {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+
+		p {
+			display: flex;
+			align-items: center;
+		}
+	}
+
+	.second-div {
+		font-size: 0.9rem;
+		margin-top: 1rem;
+
+		span {
+			font-weight: bold;
+		}
+	}
+`;
+
+const Friends = styled.div`
+	padding: 1rem 0;
+	max-width: 20rem;
+	margin: 0 auto;
+	margin-top: 1rem;
+	color: #919294;
+	border-top: 1px solid #ced0d4;
+	position: relative;
+`;
+
+const HeadingContent = styled.div`
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 1rem;
+
+	div {
+		display: flex;
+		align-items: center;
+		gap: 1.5rem;
+		color: #919294;
+	}
+`;
+
+const EditBottom = styled.div`
+	position: absolute;
+	height: 4rem;
+	width: 4rem;
+	background: white;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+	right: 0rem;
+	top: 18.75rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 50%;
+	cursor: pointer;
+	z-index: 100;
 `;

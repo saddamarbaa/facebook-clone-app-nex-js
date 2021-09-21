@@ -2,8 +2,70 @@
 
 import styled from "styled-components";
 import Image from "next/image";
+import { auth, provider } from "../../config/firebase";
+import React, { useState, useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { useRouter } from "next/router";
+
+import SignUpScreen from "../../pages/sign-up";
 
 const LogInPageComponent = (props) => {
+	const router = useRouter();
+	const [email, setEmail] = useState();
+	const [password, setPassword] = useState();
+	const [signIn, setSignIn] = useState(false);
+	const {
+		register,
+		handleSubmit,
+		formState: { errors },
+	} = useForm();
+
+	useEffect(() => {
+		if (signIn) {
+			return <SignUpScreen />;
+		}
+	}, [setSignIn]);
+
+	if (signIn) {
+		return <SignUpScreen />;
+	}
+
+	const onSubmit = (data) => {
+		if (!errors.email) {
+			auth
+				.signInWithEmailAndPassword(data.email, password)
+				.then((signInedUser) => {
+					// signIn successful.
+					// console.log(signInedUser);
+					router.push("/");
+				})
+				.catch((error) => {
+					// An error happened.
+					// const errorCode = error.code;
+					const errorMessage = error.message;
+					alert(errorMessage);
+				});
+
+			// setEmail("");
+			setPassword("");
+		}
+	};
+
+	const signInWithGoogleHandler = (event) => {
+		event.preventDefault();
+		auth
+			.signInWithPopup(provider)
+			.then((signInedUser) => {
+				// signIn successful.
+				// console.log(signInedUser);
+				history.push("/");
+			})
+			.catch((error) => {
+				// An error happened.
+				// console.log(error);
+			});
+	};
+
 	return (
 		<LogInPageComponentWrapper>
 			<Container>
@@ -22,14 +84,29 @@ const LogInPageComponent = (props) => {
 				<ContactForm>
 					<section>
 						<h1>Log in to Facebook</h1>
-						<form>
+						<form autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
 							<div className='control'>
 								<label htmlFor='email'> Email</label>
+								{errors.email && (
+									<p className='error'>Enter valid email </p>
+								)}
+
 								<input
-									type='email'
-									id='email'
-									required
+									onChange={(event) => {
+										setEmail(event.target.value);
+									}}
+									value={email}
+									className='input'
+									type='text'
+									id={errors ? "error" : "email"}
+									name='email'
 									placeholder=''
+									required
+									{...register("email", {
+										required: true,
+										pattern:
+											/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+									})}
 								/>
 							</div>
 
@@ -42,6 +119,11 @@ const LogInPageComponent = (props) => {
 									id='password'
 									required
 									placeholder=''
+									minLength='6'
+									onChange={(event) => {
+										setPassword(event.target.value);
+									}}
+									value={password}
 								/>
 							</div>
 
@@ -50,15 +132,18 @@ const LogInPageComponent = (props) => {
 							</div>
 						</form>
 						<div className='actions'>
-							<CustomButtonWithGoogle>
+							<CustomButtonWithGoogle onClick={signInWithGoogleHandler}>
 								<Image
 									src='/images/google.png'
 									alt='Google Logo'
 									width={25}
 									height={25}
 									objectFit='contain'
+									onClick={signInWithGoogleHandler}
 								/>
-								<span style={{ marginLeft: "0.5rem" }}>
+								<span
+									style={{ marginLeft: "0.5rem" }}
+									onClick={signInWithGoogleHandler}>
 									Join with Google
 								</span>
 							</CustomButtonWithGoogle>
@@ -66,8 +151,10 @@ const LogInPageComponent = (props) => {
 
 						<p className='option'>Or</p>
 
-						<div className='actions'>
-							<NewAccountButton>Create New Account</NewAccountButton>
+						<div className='actions' onClick={() => setSignIn(true)}>
+							<NewAccountButton onClick={() => setSignIn(true)}>
+								Create New Account
+							</NewAccountButton>
 						</div>
 					</section>
 				</ContactForm>
@@ -98,6 +185,12 @@ const LogInPageComponentWrapper = styled.div`
 	max-width: 90.75rem;
 	overflow: hidden;
 	margin: 0 auto;
+
+	.error {
+		width: 100%;
+		color: red;
+		text-align: right;
+	}
 `;
 
 const Container = styled.div`
@@ -209,6 +302,7 @@ const ContactForm = styled.div`
 			box-shadow: 0 0 3px 2px rgb(14 118 168/ 50%);
 		}
 	}
+
 	.actions {
 		margin-top: 1.5rem;
 	}
@@ -234,7 +328,7 @@ const CustomButton = styled.button`
 	padding: 0.5rem 1rem;
 	border-radius: 4px;
 	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
-	transition: 3s;
+	transition: 0.4s;
 	color: white;
 	font-size: 1rem;
 	display: block;

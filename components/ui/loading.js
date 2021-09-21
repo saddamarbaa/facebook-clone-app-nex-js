@@ -31,8 +31,8 @@ const Loading = () => {
 						position: "relative",
 						cursor: "pointer",
 						marginBottom: "3rem",
-						width: "8rem",
-						height: "8rem",
+						width: "7rem",
+						height: "7rem",
 						display: "block",
 					}}>
 					<Image
