@@ -15,10 +15,27 @@ import VideoCallIcon from "@material-ui/icons/VideoCall";
 import FiberManualRecordIcon from "@material-ui/icons/FiberManualRecord";
 import ArrowForwardIosRoundedIcon from "@material-ui/icons/ArrowForwardIosRounded";
 
+import { useDispatch, useSelector } from "react-redux";
+import {
+	setHideComposeState,
+	setShowComposeState,
+} from "../../features/sendPost/sendPostSlice";
+
+import { friends } from "../../lib/api-util";
+
 const AddPost = (props) => {
 	const messageRef = useRef(null);
 	const autoScrollToBottomRef = useRef(null);
 	const [user] = useAuthState(auth);
+	const dispatch = useDispatch();
+
+	const closeCompose = () => {
+		dispatch(setHideComposeState());
+	};
+
+	const showCompose = () => {
+		dispatch(setShowComposeState());
+	};
 
 	return (
 		<AddPostWrapper>
@@ -36,7 +53,8 @@ const AddPost = (props) => {
 					<HeaderSearch>
 						<input
 							type='text'
-							placeholder='What`s is on your mind,  (user Name)?'
+							placeholder='What`s is on your mind,  (user Name) ?'
+							onClick={showCompose}
 						/>
 					</HeaderSearch>
 				</div>
@@ -86,31 +104,29 @@ const AddPost = (props) => {
 					Create Room
 				</Button>
 				<div className='wrapper'>
-					<div className='user icons hid-s'>
-						<Avatar />
-						<FiberManualRecordIcon className='absolute-icon' />
-					</div>
-					<div className='user icons'>
-						<Avatar />
-						<FiberManualRecordIcon className='absolute-icon' />
-					</div>
-					<div className='user icons'>
-						<Avatar />
-						<FiberManualRecordIcon className='absolute-icon' />
-					</div>
-					<div className='user icons'>
-						<Avatar />
-						<FiberManualRecordIcon className='absolute-icon' />
-					</div>
-					<div className='user icons  '>
-						<Avatar />
-						<FiberManualRecordIcon className='absolute-icon' />
-					</div>
-
-					<div className='user icons'>
-						<Avatar />
-						<FiberManualRecordIcon className='absolute-icon' />
-					</div>
+					{friends &&
+						friends?.map((friend, index) => {
+							return (
+								<div
+									className={
+										index === 3 || index === 5
+											? "user icons hid-s "
+											: "user icons "
+									}
+									key={index}>
+									<Avatar src={friend?.image} />
+									<FiberManualRecordIcon
+										className='absolute-icon'
+										style={{
+											color:
+												index === 3 || index === 5 || index === 6
+													? "red"
+													: "green",
+										}}
+									/>
+								</div>
+							);
+						})}
 
 					<div className='absolute-arrow'>
 						<ArrowForwardIosRoundedIcon />
@@ -227,6 +243,11 @@ const CreateRoom = styled(CustomCard)`
 		display: flex;
 		align-items: center;
 		cursor: pointer;
+
+		@media (max-width: 61.938rem) {
+			justify-content: space-between;
+			width: 100%;
+		}
 	}
 
 	.user.icons {
@@ -251,7 +272,7 @@ const CreateRoom = styled(CustomCard)`
 	}
 
 	.user.icons.hid-s {
-		@media (max-width: 42.375rem) {
+		@media (max-width: 41.375rem) {
 			display: none;
 		}
 	}
