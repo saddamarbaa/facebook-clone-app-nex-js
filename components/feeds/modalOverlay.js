@@ -106,6 +106,7 @@ const NewPost = ({ name, image }) => {
 
 								<div className='control'>
 									<textarea
+										autoFocus
 										placeholder={
 											errors.post ? "Post is required" : placeholder
 										}

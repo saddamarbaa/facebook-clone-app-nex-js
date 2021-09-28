@@ -26,12 +26,12 @@ const Stories = () => {
 				/>
 			</div>
 
-			<Story
+			{/* <Story
 				creatStory='creatStory'
 				userName='Saddam Arbaa'
 				userImage='/images/profile.jpg'
 				storyImage='/images/profile.jpg'
-			/>
+			/> */}
 
 			<Story
 				userName='Saddam Arbaa'
@@ -48,6 +48,12 @@ const Stories = () => {
 				userName='Mark Zuckerberg'
 				userImage='/friends/mark.jpg'
 				storyImage='/friends/mark2.jpg'
+			/>
+
+			<Story
+				userName='Sundar Pichai'
+				userImage='/friends/sudar.png'
+				storyImage='/friends/Sundar_pichai.png.webp'
 			/>
 		</Wrapper>
 	);
@@ -89,5 +95,6 @@ const Wrapper = styled.div`
 		width: 2.5rem;
 		height: 2.5rem;
 		bottom: 4.125rem;
+		display: none;
 	}
 `;
