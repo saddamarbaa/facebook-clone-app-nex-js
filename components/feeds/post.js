@@ -9,20 +9,23 @@ import ThumbUpIcon from "@material-ui/icons/ThumbUp";
 import SentimentVerySatisfiedIcon from "@material-ui/icons/SentimentVerySatisfied";
 import ShareIcon from "@material-ui/icons/Share";
 import ChatBubbleOutlineIcon from "@material-ui/icons/ChatBubbleOutline";
+import React from "react";
 
 import { getRandomIntNumberBetween } from "../../lib/api-util";
 
-const Post = ({
-	userName,
-	userImage,
-	postImage,
-	postContent,
-	postHeading,
-	isVideo,
-	videoSrc,
-	constantDate,
-	height,
-}) => {
+const Post = React.forwardRef((props, ref) => {
+	const {
+		userName,
+		userImage,
+		postImage,
+		postContent,
+		postHeading,
+		isVideo,
+		videoSrc,
+		constantDate,
+		height,
+	} = props;
+
 	return (
 		<Wrapper>
 			<CustomCard>
@@ -120,7 +123,10 @@ const Post = ({
 			</CustomCard>
 		</Wrapper>
 	);
-};
+});
+
+// To fix error(Component definition is missing display/name-react)
+Post.displayName = "Post";
 
 export default Post;
 

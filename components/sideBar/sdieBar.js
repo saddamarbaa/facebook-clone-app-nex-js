@@ -37,8 +37,6 @@ const SideBar = (props) => {
 	const dispatch = useDispatch();
 	const router = useRouter();
 
-	console.log(" user?.displayName", user?.photoURL);
-
 	return (
 		<SideBarWrapper>
 			<div id='fixed-position'>

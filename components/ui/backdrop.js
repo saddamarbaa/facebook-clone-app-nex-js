@@ -5,9 +5,7 @@ import styled from "styled-components";
 
 const BackDrop = (props) => {
 	return ReactDOM.createPortal(
-		<BackdropWrapper onClick={props?.closeCompose}>
-			{props.children}
-		</BackdropWrapper>,
+		<BackdropWrapper>{props.children}</BackdropWrapper>,
 		document.getElementById("backdrop--root"),
 	);
 };

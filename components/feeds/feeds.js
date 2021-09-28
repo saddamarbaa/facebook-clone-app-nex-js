@@ -7,8 +7,9 @@ import TimeAgo from "react-timeago";
 import { useAuthState } from "react-firebase-hooks/auth";
 import FlipMove from "react-flip-move";
 import { useRef } from "react";
-import { auth } from "../../config/firebase";
+import db, { auth } from "../../config/firebase";
 import { Card } from "@material-ui/core";
+import moment from "moment";
 
 import StaticPosts from "./staticPosts";
 import Stories from "./stories";
@@ -16,6 +17,7 @@ import ModalOverlay from "./modalOverlay";
 
 import { useDispatch, useSelector } from "react-redux";
 import { selectSendPost } from "../../features/sendPost/sendPostSlice";
+import Post from "./post";
 
 const Feeds = (props) => {
 	const dispatch = useDispatch();
@@ -24,6 +26,28 @@ const Feeds = (props) => {
 	const [user] = useAuthState(auth);
 	const messageRef = useRef(null);
 	const autoScrollToBottomRef = useRef(null);
+	const [post, setPost] = useState([]);
+
+	useEffect(() => {
+		const unsubscribe = db
+			.collection("posts")
+			.orderBy("timestamp", "desc")
+			.limit(1)
+			.onSnapshot((snapshot) => {
+				setPost(
+					snapshot.docs.map((doc) => {
+						return {
+							data: doc?.data(),
+							id: doc?.id,
+						};
+					}),
+				);
+			});
+
+		return () => {
+			unsubscribe();
+		};
+	}, []);
 
 	return (
 		<FeedWrapper>
@@ -31,10 +55,26 @@ const Feeds = (props) => {
 
 			<Stories />
 			<AddPost />
+			{/* Post */}
+			<FlipMove>
+				{post?.map(({ id, data }) => {
+					return (
+						<Post
+							key={id}
+							constantDate={moment(
+								data?.timestamp?.toDate()?.getTime(),
+							).format("LT")}
+							userName={data?.userName}
+							userImage={data?.userImage}
+							postImage={data?.postImage}
+							postHeading={data?.postHeading}
+							postContent={data?.postContent}
+						/>
+					);
+				})}
+			</FlipMove>
 			<StaticPosts />
 			<FeedsChatBody>
-				<FlipMove></FlipMove>
-
 				{/* Empty div for auto scroll */}
 				<ScrollToBottom
 					ref={autoScrollToBottomRef}

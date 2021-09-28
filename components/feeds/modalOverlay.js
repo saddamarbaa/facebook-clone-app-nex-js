@@ -6,7 +6,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { Avatar, IconButton } from "@material-ui/core";
 import { useDispatch, useSelector } from "react-redux";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { auth } from "../../config/firebase";
+import db, { auth } from "../../config/firebase";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import firebase from "firebase";
@@ -40,11 +40,13 @@ const NewPost = ({ name, image }) => {
 		if (!errors.post) {
 			db.collection("posts")
 				.add({
-					displayName: user?.displayName,
-					photoURL: user?.photoURL
+					userName: user?.displayName,
+					userImage: user?.photoURL
 						? user?.photoURL
 						: "/images/tem-img.png",
-					post: data.post,
+					postImage: "",
+					postHeading: "",
+					postContent: data?.post,
 					timestamp: firebase.firestore.FieldValue.serverTimestamp(),
 				})
 				.then((docRef) => {
@@ -53,6 +55,8 @@ const NewPost = ({ name, image }) => {
 				.catch((error) => {
 					console.error("Error adding document: ", error);
 				});
+
+			closeCompose();
 		}
 	};
 
@@ -60,63 +64,60 @@ const NewPost = ({ name, image }) => {
 
 	// Portal
 	return (
-		<BackDrop closeCompose={closeCompose}>
+		<BackDrop>
 			{ReactDOM.createPortal}
 
 			{ReactDOM.createPortal(
 				<ModalOverlay>
 					<Container>
-						<TopContent>
-							<EditBottom>
-								<IconButton>
-									<CloseIcon
-										style={{
-											fontSize: "1.8rem",
-											color: "blue",
-										}}
-										onClick={closeCompose}
-									/>
-								</IconButton>
-							</EditBottom>
-							<h2>Create Post</h2>
-						</TopContent>
+						<form autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
+							<TopContent>
+								<EditBottom>
+									<IconButton>
+										<CloseIcon
+											style={{
+												fontSize: "1.8rem",
+												color: "blue",
+											}}
+											onClick={closeCompose}
+										/>
+									</IconButton>
+								</EditBottom>
+								<h2>Create Post</h2>
+							</TopContent>
 
-						<BodyContent>
-							<UserHeading>
-								<IconButton style={{ marginLeft: "-1rem" }}>
-									<Avatar
-										src={
-											user?.photoURL
-												? user?.photoURL
-												: "/images/tem-img.png"
+							<BodyContent>
+								<UserHeading>
+									<IconButton style={{ marginLeft: "-1rem" }}>
+										<Avatar
+											src={
+												user?.photoURL
+													? user?.photoURL
+													: "/images/tem-img.png"
+											}
+										/>
+									</IconButton>
+									<div className='user-head'>
+										<span>
+											{user?.displayName ? user?.displayName : ""}
+										</span>
+									</div>
+								</UserHeading>
+
+								<div className='control'>
+									<textarea
+										placeholder={
+											errors.post ? "Post is required" : placeholder
 										}
+										{...register("post", { required: true })}
 									/>
-								</IconButton>
-								<div className='user-head'>
-									<span>
-										{user?.displayName ? user?.displayName : ""}
-									</span>
 								</div>
-							</UserHeading>
+							</BodyContent>
 
-							<div className='control'>
-								{errors.subject && (
-									<p className='error'>Post is required</p>
-								)}
-								<input
-									onChange={(event) => {
-										setPost(event.target.value);
-									}}
-									value={post}
-									placeholder={placeholder}
-									{...register("post", { required: true })}
-								/>
-							</div>
-						</BodyContent>
-
-						<BottomContent>
-							<CustomButton>Post</CustomButton>
-						</BottomContent>
+							<BottomContent>
+								<CustomButton>Post</CustomButton>
+							</BottomContent>
+						</form>
 					</Container>
 				</ModalOverlay>,
 				document.getElementById("modal--overlay--root"),
@@ -137,6 +138,12 @@ const ModalOverlay = styled.div`
 	display: flex;
 	justify-content: center;
 	align-items: center;
+
+	.error {
+		width: 100%;
+		color: red;
+		text-align: right;
+	}
 `;
 
 const Container = styled.div`
@@ -148,6 +155,9 @@ const Container = styled.div`
 	border-radius: 6px;
 	background-color: white;
 	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+	display: flex;
+	flex-direction: column;
+	padding-bottom: 0.5rem;
 `;
 
 const TopContent = styled.div`
@@ -155,7 +165,6 @@ const TopContent = styled.div`
 	padding: 1rem;
 	border-bottom: 1px solid #dadde1;
 	position: relative;
-
 	h2 {
 		@media (max-width: 578px) {
 			font-size: 1.3rem;
@@ -182,14 +191,12 @@ const BodyContent = styled.div`
 			height: 100%;
 			background: transparent;
 			font-size: 1.2rem;
-
 			::placeholder {
 				/* Chrome, Firefox, Opera, Safari 10.1+ */
 				font-size: 1.2rem;
 				font-weight: bold;
 				color: gray;
 				opacity: 1; /* Firefox */
-
 				@media (max-width: 578px) {
 					font-size: 1rem;
 				}
@@ -200,7 +207,6 @@ const BodyContent = styled.div`
 				color: gray;
 				font-weight: bold;
 				opacity: 1;
-
 				@media (max-width: 578px) {
 					font-size: 1rem;
 				}
@@ -211,7 +217,6 @@ const BodyContent = styled.div`
 				opacity: 1;
 				color: gray;
 				font-weight: bold;
-
 				@media (max-width: 578px) {
 					font-size: 1rem;
 				}
@@ -241,7 +246,6 @@ const CustomButton = styled.button`
 	height: 2.7rem;
 	width: 100%;
 	margin: 0 auto;
-
 	&:hover {
 		background: rgba(14, 118, 168, 0.8);
 	}
@@ -261,7 +265,6 @@ const EditBottom = styled.div`
 	border-radius: 50%;
 	cursor: pointer;
 	z-index: 100;
-
 	@media (max-width: 578px) {
 		top: 10px;
 	}
