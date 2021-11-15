@@ -4,7 +4,7 @@ import React from "react";
 import { Circle } from "better-react-spinkit";
 import Image from "next/image";
 
-const Loading = () => {
+const Loading  = () => {
 	return (
 		<div
 			style={{

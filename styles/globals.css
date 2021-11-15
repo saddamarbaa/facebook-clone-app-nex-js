@@ -62,6 +62,16 @@ ul {
 	list-style: none;
 }
 
+/* .control .error-is-invalid {
+	color: red;
+	color: #ff9700;
+	transition: 0.3s;
+}
+
+ */
+
+
+
 ::-webkit-input-placeholder {
 	/* Chrome/Opera/Safari */
 	font-size: 0.85rem;
