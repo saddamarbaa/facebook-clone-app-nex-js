@@ -73,13 +73,15 @@ Contributions are always welcome!
 ### Instagram Clone App built with React Js + Next Js + TypeScript + Redux + Tailwind CSS + Heroicons 
 
 ###  <a href="https://github.com/saddamarbaa/Instagram-clone-app-nex-js"> Github Repo </a>
-###  <a href="https://messenger-clone-app-nex-js.vercel.app/">LIVE DEMO</a> 
+###  <a href="https://instagram-clone-app-nex-js.vercel.app/">LIVE DEMO</a> 
+
 
 
 ###  Messenger Clone App built with React Js + Next Js + Redux +  Styled Components + Material-UI  
 
 ###  <a href="https://github.com/saddamarbaa/messenger-clone-app-nex-js"> Github Repo </a>
-###  <a href="https://instagram-clone-app-nex-js.vercel.app/">LIVE DEMO</a> 
+###  <a href="https://messenger-clone-app-nex-js.vercel.app/">LIVE DEMO</a> 
+
 
 ### Airbnb Clone App built with React Js + Next Js + Redux + Tailwind CSS
 
