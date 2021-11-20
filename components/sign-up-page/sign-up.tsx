@@ -138,7 +138,7 @@ const SignUpPageComponent: React.FC = () => {
 					<section>
 						<div className='title'>
 							<h1>Create a new account</h1>
-							<p>It&aposs quick and easy.</p>
+							<p>its quick and easy.</p>
 						</div>
 
 						<form autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
